@@ -1,0 +1,12 @@
+#Step1 Make bed
+
+plink --bfile /BiO/00_original_data/2_2019_UK_biobank/download_imputation/binary_no_QC/00_ukb_imp_all_snp_chr16 --extract ../11_chr16_1000G/16.l2.ldscore --keep ../00_FTO/00_FTO.fam --make-bed --out UKB_chr16_hm3
+
+#Step2 Extract SNP ID
+
+for i in {1..40747};do head UKB_chr16_hm3.bim -n $i | tail -1 > 00_snp_list/v1.$i; done
+
+#Step3 Make the --score input
+
+for i in {1..40747};do cat 00_snp_list/v1.$i |awk '{print$2}' > 00_snp_list/v2.$i; done
+for i in {1..40747};do cat 00_snp_list/v1.$i |awk '{print$2}' > 00_snp_list/v2.$i; done
