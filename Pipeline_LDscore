@@ -1,7 +1,7 @@
 #Step1 Make bed
 
 plink --bfile /BiO/00_original_data/2_2019_UK_biobank/download_imputation/binary_no_QC/00_ukb_imp_all_snp_chr16 --extract ../11_chr16_1000G/16.l2.ldscore --keep ../00_FTO/00_FTO.fam --make-bed --out UKB_chr16_hm3
-plink --bfile UKB_chr16_hm3 --extract UKB_chr16_hm3.dup --make-bed --out 11_UKB_chr16_hm3
+plink --bfile UKB_chr16_hm3 --extract UKB_chr16_hm3.dup --make-bed --out v2_UKB_chr16_hm3
 
 #Step2 Extract SNP ID
 
@@ -17,11 +17,11 @@ echo 1 > 00_snplist/v4.root
 for i in {1..40267};do paste -d '\t' 00_snp_list/v2.$i 00_snp_list/v3.$i 00_snp_list/v4.root > 00_snp_list/v5.$i; done
 
 #Step4 Score
-for i in {1..40267};do plink --bfile 11_UKB_chr16_hm3 --score 00_snp_list/v5.$i sum --out 11_recode/v1.$i
+for i in {1..40267};do plink --bfile v2_UKB_chr16_hm3 --score 00_snp_list/v5.$i sum --out 11_recode/v1.$i; done
 cat 11_recode/v1.$i | awk '{print$6}' > 11_recode/v2.$i
 
 #Step5 merge score
-cat 11_UKB_chr16_hm3.fam | awk '{prtin$1}' > 11_recode/v3.1
+cat v2_UKB_chr16_hm3.fam | awk '{prtin$1}' > 11_recode/v3.1
 
 for i in {1..40267};do
         a=$(($i+1))
