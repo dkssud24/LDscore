@@ -22,11 +22,12 @@ for i in {1..40267};do cat 11_recode/v1.$i.profile | awk '{print$6}' > 11_recode
 
 #Step5 merge score
 #cat v2_UKB_chr16_hm3.fam | awk '{prtin$1}' > 11_recode/v3.1
+#vi v3.1 i FID : wq
 
 #for i in {1..40267};do
 #        a=$(($i+1))
 #        paste v3.$i v2.$i > v3.$a
-#        rm v3.$i
+#        rm v3.$i;
 #done
 ls -v v2.* | xargs paste > merge.txt
 
