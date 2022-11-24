@@ -28,3 +28,6 @@ for i in {1..40267};do
         paste v3.$i v2.$i > v3.$a
         rm v3.$i
 done
+
+
+# ls -v v2.* | xargs paste > merge.txt
