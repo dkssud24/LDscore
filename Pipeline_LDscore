@@ -3,6 +3,19 @@
 plink --bfile /BiO/00_original_data/2_2019_UK_biobank/download_imputation/binary_no_QC/00_ukb_imp_all_snp_chr16 --extract ../11_chr16_1000G/16.l2.ldscore --keep ../00_FTO/00_FTO.fam --make-bed --out UKB_chr16_hm3
 plink --bfile UKB_chr16_hm3 --extract UKB_chr16_hm3.dup --make-bed --out v2_UKB_chr16_hm3
 
+#=====
+Rscript
+d <- read.table("UKB_chr16_hm3.bim")
+head(d)
+aa <- d[ d$dup == "TRUE",]
+aa2 <- aa[,-c(7)]
+write.table(aa2,'extract_dup.txt',quote=FALSE,row.names=FALSE,sep="\t",col.names=FALSE)
+
+#====
+plink
+plink --bfile v2_UKB_chr16_hm3 --exclude extract_dup.txt --make-bed --out v3_UKB_chr16_hm3_dup
+
+
 #Step2 Extract SNP ID
 
 for i in {1..40267};do head 11_UKB_chr16_hm3.bim -n $i | tail -1 > 00_snp_list/v1.$i; done
