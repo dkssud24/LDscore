@@ -44,3 +44,27 @@ for i in {1..40267};do cat 11_recode/v1.$i.profile | awk '{print$6}' > 11_recode
 #done
 ls -v v2.* | xargs paste > merge.txt
 
+
+#Step6 GxE ldscore in R
+
+library(corrplot)
+library(dplyr)
+
+g <- read.table("recode/v3.merge.txt",header=T)
+bim <- read.table('22_FTO_hm3_dup_related30K_drf.bim')
+names(g) <- bim$V2
+fam <- read.table("22_FTO_hm3_dup_related30K_drf.fam")
+fam2 <- fam[,c(1,2)]
+names(fam2) <- c("FID","IID")
+drf_pheno <- read.table("11_drf.pheno",header=T)
+fam3 <- left_join(fam2,drf_pheno,by="FID")
+drf_g <- (g*fam3$X1558)
+gxdrfm <- cor(drf_g)
+gxdrfm2 <- gxdrfm*gxdrfm
+gxdrf_ldscore <- data.frame(rowSums(gxdrfm2))
+names(gxdrf_ldscore) <- c("gxdrf_ldscore")
+write.table(gxdrf_ldscore,'33_outcome_ldscore.gxdrf',quote=FALSE,row.names=FALSE,sep="\t")
+
+
+
+
