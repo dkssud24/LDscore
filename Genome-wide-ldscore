@@ -1,0 +1,24 @@
+#LD score을 GCTA로 구한다
+#이후 GCTA outcome을 통해 BLOCK을 찾음
+
+#R
+library(data.table)
+library(dplyr)
+GCTA_outcome <- fread("chr1.bedbimfam.score.ld.v2")
+GCTA_outcome <- data.frame(GCTA_outcome)
+length_outcome <- dim(GCTA_outcome)[1]
+for (a in 1:length_outcome){
+  GCTA_outcome[(a+1),13] <- GCTA_outcome[a,12]==GCTA_outcome[(a+1),12]
+}
+
+middle_point <- GCTA_outcome[ GCTA_outcome$V13 == "FALSE",]
+point <- NULL
+spoint <- data.frame(middle_point$bp - 5000000)
+epoint <- data.frame(middle_point$bp + 5000000)
+allpoint <- cbind(spoint,epoint)
+names(allpoint) <- c("start_point","end_point")
+
+tmp <- cbind(0,(GCTA_outcome[1,3]+5000000))
+tmp <- data.frame(tmp)
+names(tmp) <- c("start_point","end_point")
+allpoint <- rbind(tmp,allpoint)
