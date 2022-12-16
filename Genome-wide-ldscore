@@ -4,14 +4,14 @@
 #R
 library(data.table)
 library(dplyr)
-GCTA_outcome <- fread("chr1.bedbimfam.score.ld.v2")
+GCTA_outcome <- fread("chr1.bedbimfam.score.score.ld")
 GCTA_outcome <- data.frame(GCTA_outcome)
 length_outcome <- dim(GCTA_outcome)[1]
 for (a in 1:length_outcome){
-  GCTA_outcome[(a+1),13] <- GCTA_outcome[a,12]==GCTA_outcome[(a+1),12]
+  GCTA_outcome[(a+1),9] <- GCTA_outcome[a,6]==GCTA_outcome[(a+1),6]
 }
 
-middle_point <- GCTA_outcome[ GCTA_outcome$V13 == "FALSE",]
+middle_point <- GCTA_outcome[ GCTA_outcome$V9 == "FALSE",]
 point <- NULL
 spoint <- data.frame(middle_point$bp - 5000000)
 epoint <- data.frame(middle_point$bp + 5000000)
@@ -22,4 +22,21 @@ tmp <- cbind(0,(GCTA_outcome[1,3]+10000000))
 tmp <- data.frame(tmp)
 names(tmp) <- c("start_point","end_point")
 allpoint <- rbind(tmp,allpoint)
+allpoint <- na.omit(allpoint)
 write.table(allpoint,'chr1.bedbimfam.blocksize',quote=FALSE,row.names=FALSE,sep="\t")
+
+#Linux
+cat chr1.bedbimfam.blocksize | awk '{print$1}' > chr1.bedbimfam.blocksize.start
+cat chr1.bedbimfam.blocksize | awk '{print$2}' > chr1.bedbimfam.blocksize.end
+
+a=`cat chr1.bedbimfam.blocksize | wc -l`
+a=$(expr $a + 1)
+
+for ((b=2; b<$a; b++));do
+        c=`head chr1.bedbimfam.blocksize.start -n $b | tail -n 1`
+        d=`head chr1.bedbimfam.blocksize.end -n $b | tail -n 1`
+        e=$(expr $b - 1)
+        plink --bfile chr1.bedbimfam.v2 --chr 1 --from-bp $c --to-bp $d --make-bed --out block$e
+done
+~     
+
