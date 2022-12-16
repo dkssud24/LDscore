@@ -36,7 +36,38 @@ for ((b=2; b<$a; b++));do
         c=`head chr1.bedbimfam.blocksize.start -n $b | tail -n 1`
         d=`head chr1.bedbimfam.blocksize.end -n $b | tail -n 1`
         e=$(expr $b - 1)
-        plink --bfile chr1.bedbimfam.v2 --chr 1 --from-bp $c --to-bp $d --make-bed --out block$e
+        plink --bfile chr1.bedbimfam.v2 --chr 1 --from-bp $c --to-bp $d --make-bed --out block$e;
 done
-~     
+#####
+
+for i in {1..46}; do echo block$i; done >> list.txt
+
+
+for i in $a;do
+	mkdir 11_recode_$i
+	mkdir 00_snp_list_$i
+	
+	#count bim
+	b=`wc -l ${i}.bim`
+	c=`echo $b | awk '{print$1}'`
+	c=$(expr $c + 1)
+	echo $c
+	
+	#step1 extract SNP ID
+	for ((o=1; o<$c; o++));do head $i.bim -n $o | tail -1 > 00_snp_list_$i/v1.$o;done
+
+	#step2 make the --score input
+	for ((o=1; o<$c; o++));do cat 00_snp_list_$i/v1.$o | awk '{print$2}' > 00_snp_list_$i/v2.$o;done
+	for ((o=1; o<$c; o++));do cat 00_snp_list_$i/v1.$o | awk '{print$5}' > 00_snp_list_$i/v3.$o;done
+
+	#step3 merge file
+	for ((o=1; o<$c; o++));do paste -d '\t' 00_snp_list_$i/v2.$o 00_snp_list_$i/v3.$o /BiO/hae/22_gxe_heri/22_chr16_UKB/LDblock/v4.root > 00_snp_list_$i/v5.$o;done
+
+	#step4 score
+	for ((o=1; o<$c; o++));do plink --bfile $i --score 00_snp_list_$i/v5.$o sum --out 11_recode_$i/v1.$o;done	
+	for ((o=1; o<$c; o++));do cat 11_recode_$i/v1.$o.profile | awk '{print$6}' > 11_recode_$i/v2.$o;done
+	ls -v 11_recode_$i/v2.* | xargs paste > 11_recode_$i/v3.merge
+
+done
+
 
