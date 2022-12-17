@@ -1,7 +1,7 @@
 #LD score을 GCTA로 구한다
 #이후 GCTA outcome을 통해 BLOCK을 찾음
 
-#R
+#Rscript
 library(data.table)
 library(dplyr)
 GCTA_outcome <- fread("chr1.bedbimfam.score.score.ld")
@@ -26,6 +26,7 @@ allpoint <- na.omit(allpoint)
 write.table(allpoint,'chr1.bedbimfam.blocksize',quote=FALSE,row.names=FALSE,sep="\t")
 
 #Linux
+echo 1 > v4.root
 cat chr1.bedbimfam.blocksize | awk '{print$1}' > chr1.bedbimfam.blocksize.start
 cat chr1.bedbimfam.blocksize | awk '{print$2}' > chr1.bedbimfam.blocksize.end
 
@@ -38,12 +39,13 @@ for ((b=2; b<$a; b++));do
         e=$(expr $b - 1)
         plink --bfile chr1.bedbimfam.v2 --chr 1 --from-bp $c --to-bp $d --make-bed --out block$e;
 done
-#####
 
-for i in {1..46}; do echo block$i; done >> list.txt
+for ((b=2; b<$a; b++));do do echo block$i; done >> list.txt
+
+arr=$(<list.txt)
 
 
-for i in $a;do
+for i in $arr;do
 	mkdir 11_recode_$i
 	mkdir 00_snp_list_$i
 	
@@ -61,12 +63,12 @@ for i in $a;do
 	for ((o=1; o<$c; o++));do cat 00_snp_list_$i/v1.$o | awk '{print$5}' > 00_snp_list_$i/v3.$o;done
 
 	#step3 merge file
-	for ((o=1; o<$c; o++));do paste -d '\t' 00_snp_list_$i/v2.$o 00_snp_list_$i/v3.$o /BiO/hae/22_gxe_heri/22_chr16_UKB/LDblock/v4.root > 00_snp_list_$i/v5.$o;done
+	for ((o=1; o<$c; o++));do paste -d '\t' 00_snp_list_$i/v2.$o 00_snp_list_$i/v3.$o v4.root > 00_snp_list_$i/v5.$o;done
 
 	#step4 score
 	for ((o=1; o<$c; o++));do plink --bfile $i --score 00_snp_list_$i/v5.$o sum --out 11_recode_$i/v1.$o;done	
 	for ((o=1; o<$c; o++));do cat 11_recode_$i/v1.$o.profile | awk '{print$6}' > 11_recode_$i/v2.$o;done
-	ls -v 11_recode_$i/v2.* | xargs paste > 11_recode_$i/v3.merge
+#	ls -v 11_recode_$i/v2.* | xargs paste > 11_recode_$i/v3.merge
 
 done
 
