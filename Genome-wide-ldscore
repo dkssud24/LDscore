@@ -40,7 +40,13 @@ for ((b=2; b<$a; b++));do
         plink --bfile chr1.bedbimfam.v2 --chr 1 --from-bp $c --to-bp $d --make-bed --out block$e;
 done
 
-for ((b=2; b<$a; b++));do do echo block$i; done >> list.txt
+#step나눠
+chr=2
+
+a=`cat chr$chr.bedbimfam.blocksize | wc -l`
+a=$(expr $a + 1)
+
+for ((b=2; b<$a; b++));do echo block$b >> list.txt; done
 
 arr=$(<list.txt)
 
