@@ -1,0 +1,89 @@
+library(corrplot)
+library(dplyr)
+setwd("../00_block0")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block0.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block0.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+library(corrplot)
+library(dplyr)
+setwd("../00_block1")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block1.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block1.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+library(corrplot)
+library(dplyr)
+setwd("../00_block2")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block2.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block2.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+library(corrplot)
+library(dplyr)
+setwd("../00_block3")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block3.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block3.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+library(corrplot)
+library(dplyr)
+setwd("../00_block3")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block3.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block3.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+library(corrplot)
+library(dplyr)
+setwd("../00_block4")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block4.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block4.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+library(corrplot)
+library(dplyr)
+setwd("../00_block5")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block5.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block5.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+library(corrplot)
+library(dplyr)
+setwd("../00_block6")
+g <- read.table("v8.merge",header=T)
+bim <- read.table("../block6.bim")
+names(g) <- bim$V2
+ldscore <- cor(g)
+ldscore2 <- ldscore*ldscore
+ldscore3 <- data.frame(rowSums(ldscore2))
+gctaldscore <- read.table("../block6.score.ld",header=T)
+cor.test(gctaldscore$ldscore,ldscore3$rowSums.ldscore2.)
+
